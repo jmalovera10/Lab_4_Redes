@@ -1,13 +1,13 @@
 package servers;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 /**
  * TCP Server
  * @author juanm
  *
  */
-
-import java.io.IOException;
-import java.net.ServerSocket;
-
 public class TCP_Server {
 
 	private ServerSocket server;
@@ -17,6 +17,17 @@ public class TCP_Server {
 			server = new ServerSocket(8080);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void start() {
+		while(true) {
+			try {
+				Socket client = server.accept();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
