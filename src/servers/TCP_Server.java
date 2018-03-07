@@ -1,5 +1,6 @@
 package servers;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -33,6 +34,21 @@ public class TCP_Server {
 		while(true) {
 			try {
 				Socket client = server.accept();
+				TCP_Worker worker=null;
+				for(int i = 0; i < workers.length; i++) {
+					if (!workers[i].isActive()) {
+						worker=workers[i];
+					}
+				}
+				if(worker==null) {
+					PrintWriter output = new PrintWriter(client.getOutputStream(),true);
+					output.println("Error service unavailable, too many clients.");
+					output.close();
+				}
+				else {
+					worker.initWorker(client);
+					worker.start();
+				}
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -42,6 +58,8 @@ public class TCP_Server {
 	}
 	
 	public static void main(String[] args) {
+		TCP_Server server = new TCP_Server();
+		server.start();
 		
 	}
 }
