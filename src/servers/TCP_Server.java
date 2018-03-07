@@ -11,6 +11,12 @@ import java.util.ArrayList;
  *
  */
 public class TCP_Server {
+	
+	public static final String SMALL_ARCHIVE = "./data";
+	
+	public static final String MEDIUM_ARCHIVE = "./data";
+	
+	public static final String LARGE_ARCHIVE = "./data";
 
 	public static final int MAX_CONN = 10;
 	
