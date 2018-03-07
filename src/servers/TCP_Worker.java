@@ -7,12 +7,18 @@ import java.net.Socket;
 
 public class TCP_Worker extends Thread{
 
+	private boolean active;
 	private Socket client;
 	private BufferedReader input;
 	private PrintWriter output;
 	private String inMessage;
 	private String outMessage;
 
+	public TCP_Worker() {
+		// TODO Auto-generated constructor stub
+		active = false;
+	}
+	
 	public TCP_Worker(Socket client) {
 		this.client = client;
 		try {
@@ -36,4 +42,9 @@ public class TCP_Worker extends Thread{
 			}
 		}
 	}
+
+	public boolean isActive() {
+		return active;
+	}
+	
 }
