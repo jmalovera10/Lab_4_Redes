@@ -71,6 +71,12 @@ public class TCP_Worker extends Thread{
 							output.println(Protocol.ACK);
 							state="onDemand";
 						}
+						else if(inMessage==Protocol.BYE) {
+							output.println(Protocol.BYE);
+							state="closed";
+							client.close();
+							this.closeConnection();
+						}
 						break;
 					case "onDemand":
 						if(inMessage=="small.PNG") {
@@ -84,6 +90,12 @@ public class TCP_Worker extends Thread{
 						else if(inMessage=="big.mp4") {
 							//send m
 							state="sending";
+						}
+						else if(inMessage==Protocol.BYE) {
+							output.println(Protocol.BYE);
+							state="closed";
+							client.close();
+							this.closeConnection();
 						}
 						break;
 					case "sending":
