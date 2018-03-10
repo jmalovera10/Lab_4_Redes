@@ -1,10 +1,16 @@
 package servers;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+
+import javax.imageio.ImageIO;
 
 import protocol.Protocol;
 
@@ -80,15 +86,43 @@ public class TCP_Worker extends Thread{
 						break;
 					case "onDemand":
 						if(inMessage=="small.PNG") {
+					        BufferedImage image = ImageIO.read(new File("/data/small.PNG"));
+					        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+					        ImageIO.write(image, "jpg", byteArrayOutputStream);
+
+					        byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+					        output.println(size);
+					        output.println(byteArrayOutputStream.toByteArray());
+					        output.flush();
+					        System.out.println("Flushed: " + System.currentTimeMillis());
 							//send small
 							state="sending";
 						}
 						else if(inMessage=="medium.mp4") {
 							//send m
-							state="sending";
+							  BufferedImage image = ImageIO.read(new File("/data/medium.mp4"));
+						        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+						        ImageIO.write(image, "jpg", byteArrayOutputStream);
+
+						        byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+						        output.println(size);
+						        output.println(byteArrayOutputStream.toByteArray());
+						        output.flush();
+						        System.out.println("Flushed: " + System.currentTimeMillis());
+								state="sending";
 						}
 						else if(inMessage=="big.mp4") {
-							//send m
+							//send big
+							BufferedImage image = ImageIO.read(new File("/data/big.mp4"));
+					        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+					        ImageIO.write(image, "jpg", byteArrayOutputStream);
+
+					        byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+					        output.println(size);
+					        output.println(byteArrayOutputStream.toByteArray());
+					        output.flush();
+					        System.out.println("Flushed: " + System.currentTimeMillis());
+							//send small
 							state="sending";
 						}
 						else if(inMessage==Protocol.BYE) {
@@ -104,6 +138,10 @@ public class TCP_Worker extends Thread{
 							state="closed";
 							client.close();
 							this.closeConnection();
+						}
+						else if(inMessage==Protocol.GET) {
+							output.println(Protocol.ACK);
+							state="onDemand";
 						}
 						break;
 					}
