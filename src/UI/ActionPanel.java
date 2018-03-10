@@ -8,45 +8,39 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class ActionPanel extends JPanel implements ActionListener{
+public class ActionPanel extends JPanel{
 
 	/**
 	 * Serial id
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final String CONNECT = "CONNECT";
+	public static final String CONNECT = "CONNECT";
 	
-	private static final String DISCONNECT = "DISCONNECT";
+	public static final String DISCONNECT = "DISCONNECT";
 	
 	private JButton btnConnect;
 	
 	private JButton btnDisconnect;
 	
-	public ActionPanel() {
+	private UserInterface controller;
+	
+	public ActionPanel(UserInterface controller) {
+		
+		this.controller = controller;
 		
 		this.setLayout(new GridLayout(1, 2));
 		this.setBorder(BorderFactory.createTitledBorder("Connectivity Options"));
 		
 		btnConnect = new JButton(CONNECT);
-		btnConnect.addActionListener(this);
+		btnConnect.addActionListener(this.controller);
 		btnConnect.setActionCommand(CONNECT);
 		this.add(btnConnect);
 		
 		btnDisconnect = new JButton(DISCONNECT);
-		btnDisconnect.addActionListener(this);
+		btnDisconnect.addActionListener(this.controller);
 		btnDisconnect.setActionCommand(DISCONNECT);
 		this.add(btnDisconnect);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String action = e.getActionCommand();
-		if(action.equals(CONNECT)) {
-			
-		}else if(action.equals(DISCONNECT)) {
-			
-		}
-		
-	}
 }
