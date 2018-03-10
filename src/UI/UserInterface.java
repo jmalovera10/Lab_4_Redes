@@ -1,10 +1,14 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
-public class UserInterface extends JFrame{
+import clients.TCP_Client;
+
+public class UserInterface extends JFrame implements ActionListener{
 
 	/**
 	 * Default serial version
@@ -15,16 +19,26 @@ public class UserInterface extends JFrame{
 	
 	private FilePanel filePanel;
 	
+	private ConsolePanel consolePanel;
+	
+	private TCP_Client client;
+	
 	public UserInterface() {
+		
+		client = new TCP_Client();
+		
 		setLayout(new BorderLayout());
 		setTitle("TCP Client");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		actPanel = new ActionPanel();
+		actPanel = new ActionPanel(this);
 		this.add(actPanel, BorderLayout.SOUTH);
 		
-		filePanel = new FilePanel();
+		filePanel = new FilePanel(this);
 		this.add(filePanel, BorderLayout.EAST);
+		
+		consolePanel = new ConsolePanel();
+		this.add(consolePanel, BorderLayout.CENTER);
 		
 		setLocationRelativeTo(null);
 		pack();
@@ -33,6 +47,23 @@ public class UserInterface extends JFrame{
 	public static void main(String[] args) {
 		UserInterface i = new UserInterface();
 		i.setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand();
+		if(command.equals(ActionPanel.CONNECT)) {
+			
+		}
+		else if(command.equals(ActionPanel.DISCONNECT)) {
+			
+		}
+		else if(command.equals(FilePanel.GET_FILE)) {
+			
+		}
+		else if(command.equals(FilePanel.LIST_FILES)) {
+			
+		}
 	}
 	
 }

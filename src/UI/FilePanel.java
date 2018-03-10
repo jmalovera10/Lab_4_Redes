@@ -3,8 +3,6 @@ package UI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,11 +11,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-public class FilePanel extends JPanel implements ActionListener{
+public class FilePanel extends JPanel{
 	
-	private static final String LIST_FILES = "List Files";
+	/**
+	 * Serial ID
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	private static final String GET_FILE = "Get File";
+
+	public static final String LIST_FILES = "List Files";
+	
+	public static final String GET_FILE = "Get File";
 	
 	private JList<String> files;
 	
@@ -25,7 +29,12 @@ public class FilePanel extends JPanel implements ActionListener{
 	
 	private JButton btnGetFile;
 	
-	public FilePanel() {
+	private UserInterface controller;
+	
+	public FilePanel(UserInterface controller) {
+		
+		this.controller = controller;
+		
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createTitledBorder("Files"));
 		
@@ -41,21 +50,16 @@ public class FilePanel extends JPanel implements ActionListener{
 		pnlActions.setLayout(new GridLayout(1, 2));
 		
 		btnShowFiles = new JButton(LIST_FILES);
-		btnShowFiles.addActionListener(this);
+		btnShowFiles.addActionListener(this.controller);
 		btnShowFiles.setActionCommand(LIST_FILES);
 		pnlActions.add(btnShowFiles);
 		
-		btnShowFiles = new JButton(GET_FILE);
-		btnShowFiles.addActionListener(this);
-		btnShowFiles.setActionCommand(GET_FILE);
-		pnlActions.add(btnShowFiles);
+		btnGetFile = new JButton(GET_FILE);
+		btnGetFile.addActionListener(this.controller);
+		btnGetFile.setActionCommand(GET_FILE);
+		pnlActions.add(btnGetFile);
 		
 		this.add(pnlActions, BorderLayout.SOUTH);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 }
