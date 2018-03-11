@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,7 +9,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import clients.TCP_Client;
@@ -45,7 +45,7 @@ public class UserInterface extends JFrame implements ActionListener{
 		consolePanel = new ConsolePanel();
 		this.add(consolePanel, BorderLayout.CENTER);
 		
-		pack();
+		setSize(new Dimension(500,500));
 		setLocationRelativeTo(null);
 	}
 	
