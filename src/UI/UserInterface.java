@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -102,7 +103,18 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 			
 			Thread t = new Thread() {
 				public void run() {
-					client.getFile(filePanel.getSelectedFile());
+					filePanel.disableGet();
+					filePanel.disableItems();
+					String file = filePanel.getSelectedFile();
+					if(file==null) {
+						consolePanel.updateConsole("You must select a file!");
+						return;
+					}
+					if(client.getFile(file)) {
+						displayImage(file);
+					}
+					filePanel.enableGet();
+					filePanel.enableItems();
 				}
 			};
 			t.start();
@@ -127,6 +139,13 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 				consolePanel.updateConsole("IO Error, please try again later");
 			}
 		}
+	}
+	
+	public void displayImage(String path) {
+		ImageIcon image = new ImageIcon("./sent-data/"+path);
+		JLabel lbl = new JLabel();
+		lbl.setIcon(image);
+		JOptionPane.showMessageDialog(this, lbl);
 	}
 
 	@Override

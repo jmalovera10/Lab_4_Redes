@@ -87,6 +87,14 @@ public class FilePanel extends JPanel{
 		btnGetFile.setEnabled(false);
 	}
 	
+	public void disableItems() {
+		files.setEnabled(false);
+	}
+	
+	public void enableItems() {
+		files.setEnabled(true);
+	}
+	
 	public void updateFiles(String[] data) {
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		for (int i = 0; i < data.length; i++) {

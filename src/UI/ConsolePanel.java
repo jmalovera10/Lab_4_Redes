@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 public class ConsolePanel extends JPanel{
 	
@@ -31,6 +32,8 @@ public class ConsolePanel extends JPanel{
 		float size = font.getSize() + 3.0f;
 		consoleText.setFont( font.deriveFont(size) );
 		consoleText.setLineWrap(true);
+		DefaultCaret caret = (DefaultCaret)consoleText.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		JScrollPane scroll = new JScrollPane(consoleText);
 		this.add(scroll, BorderLayout.CENTER);
 	}

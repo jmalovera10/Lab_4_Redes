@@ -1,9 +1,12 @@
 package servers;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -86,6 +89,20 @@ public class TCP_Worker extends Thread{
 						break;
 					case "onDemand":
 						if(inMessage.equals("small.PNG")) {
+							File file = new File("./data/small.PNG");
+							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
+							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
+
+							byte[] buffer = new byte[4096];
+							int bytesRead;
+							while((bytesRead = reader.read(buffer))!=-1) {
+								out.write(buffer, 0, bytesRead);
+							}
+
+							reader.close();
+							out.flush();
+							out.close();
+							/*
 					        BufferedImage image = ImageIO.read(new File("/data/small.PNG"));
 					        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 					        ImageIO.write(image, "jpg", byteArrayOutputStream);
@@ -95,11 +112,24 @@ public class TCP_Worker extends Thread{
 					        output.println(byteArrayOutputStream.toByteArray());
 					        output.flush();
 					        System.out.println("Flushed: " + System.currentTimeMillis());
-							//send small
-							state="sending";
+							//send small*/
+							state="established";
 						}
 						else if(inMessage.equals("medium.mp4")) {
-							//send m
+							File file = new File("./data/medium.mp4");
+							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
+							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
+
+							byte[] buffer = new byte[4096];
+							int bytesRead;
+							while((bytesRead = reader.read(buffer))!=-1) {
+								out.write(buffer, 0, bytesRead);
+							}
+
+							reader.close();
+							out.flush();
+							out.close();
+							/*
 							  BufferedImage image = ImageIO.read(new File("/data/medium.mp4"));
 						        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 						        ImageIO.write(image, "jpg", byteArrayOutputStream);
@@ -108,11 +138,24 @@ public class TCP_Worker extends Thread{
 						        output.println(size);
 						        output.println(byteArrayOutputStream.toByteArray());
 						        output.flush();
-						        System.out.println("Flushed: " + System.currentTimeMillis());
-								state="established";
+						        System.out.println("Flushed: " + System.currentTimeMillis());*/
+							state="established";
 						}
 						else if(inMessage.equals("big.mp4")) {
-							//send big
+							File file = new File("./data/big.mp4");
+							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
+							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
+
+							byte[] buffer = new byte[4096];
+							int bytesRead;
+							while((bytesRead = reader.read(buffer))!=-1) {
+								out.write(buffer, 0, bytesRead);
+							}
+
+							reader.close();
+							out.flush();
+							out.close();
+							/*
 							BufferedImage image = ImageIO.read(new File("/data/big.mp4"));
 					        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 					        ImageIO.write(image, "jpg", byteArrayOutputStream);
@@ -122,7 +165,7 @@ public class TCP_Worker extends Thread{
 					        output.println(byteArrayOutputStream.toByteArray());
 					        output.flush();
 					        System.out.println("Flushed: " + System.currentTimeMillis());
-							//send small
+							//send small*/
 							state="established";
 						}
 						else if(inMessage.equals(Protocol.BYE)) {

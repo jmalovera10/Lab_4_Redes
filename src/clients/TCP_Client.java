@@ -121,10 +121,11 @@ public class TCP_Client extends Observable{
 	 * @param name filename
 	 * @throws Exception 
 	 */
-	public void getFile(String name) {
+	public boolean getFile(String name) {
 		try {
 			output.println(Protocol.GET);
 			String msg = input.readLine();
+			finishTransfer = false;
 
 			if(msg.equals(Protocol.ACK)) {
 				System.out.println("Sending starts!");
@@ -142,19 +143,22 @@ public class TCP_Client extends Observable{
 				while((bytesRead = inFile.read(buffer))!=-1) {
 					outFile.write(buffer, 0, bytesRead);
 					packageReceived = new String(buffer, 0, bytesRead);
+					System.out.println(packageReceived);
 					setChanged();
 					notifyObservers(packageReceived);
 				}
-
+				System.out.println("File received");
 				finishTransfer = true;
-
+				
 				outFile.flush();
 				outFile.close();
 				inFile.close();
 			}
+			return finishTransfer;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 
 	}
