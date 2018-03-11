@@ -101,7 +101,7 @@ public class TCP_Client extends Observable{
 		ArrayList<String> files = new ArrayList<String>();
 		output.println(Protocol.HELLO);
 		while(!input.ready());
-		String line = input.readLine();
+		String line = input.readLine();	
 		if(line.equals(Protocol.HELLO)) {
 			while(!input.ready());
 			line = input.readLine();

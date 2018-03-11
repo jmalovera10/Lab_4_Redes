@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import clients.TCP_Client;
-import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 
 public class UserInterface extends JFrame implements ActionListener, Observer{
 
@@ -148,20 +147,7 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 	}
 
 	public void displayVideo(String path) {
-		Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-
-		JFrame frame = new JFrame(path);
-
-		EmbeddedMediaPlayerComponent mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
-
-		frame.setContentPane(mediaPlayerComponent);
-
-		frame.setLocation(0, 0);
-		frame.setSize(screenSize.width, screenSize.height);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-
-		mediaPlayerComponent.getMediaPlayer().playMedia("./sent-data/"+path);//Movie name which want to play
+		
 	}
 
 	public void displayImage(String path) {
