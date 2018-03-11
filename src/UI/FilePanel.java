@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -52,14 +53,34 @@ public class FilePanel extends JPanel{
 		btnShowFiles = new JButton(LIST_FILES);
 		btnShowFiles.addActionListener(this.controller);
 		btnShowFiles.setActionCommand(LIST_FILES);
+		btnShowFiles.setEnabled(false);
 		pnlActions.add(btnShowFiles);
 		
 		btnGetFile = new JButton(GET_FILE);
 		btnGetFile.addActionListener(this.controller);
 		btnGetFile.setActionCommand(GET_FILE);
+		btnGetFile.setEnabled(false);
 		pnlActions.add(btnGetFile);
 		
 		this.add(pnlActions, BorderLayout.SOUTH);
+	}
+	
+	public void enableActions() {
+		btnGetFile.setEnabled(true);
+		btnShowFiles.setEnabled(true);
+	}
+	
+	public void disableActions() {
+		btnGetFile.setEnabled(false);
+		btnShowFiles.setEnabled(false);
+	}
+	
+	public void updateFiles(String[] data) {
+		DefaultListModel<String> model = new DefaultListModel<String>();
+		for (int i = 0; i < data.length; i++) {
+			model.addElement(data[i]);
+		}
+		files.setModel(model);
 	}
 
 }

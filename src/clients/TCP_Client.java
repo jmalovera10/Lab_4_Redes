@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import protocol.Protocol;
 
 /**
  * TCP Client
@@ -48,6 +51,16 @@ public class TCP_Client {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public ArrayList<String> getAvailableFiles() throws Exception{
+		ArrayList<String> files = new ArrayList<String>();
+		output.println(Protocol.HELLO);
+		while(!input.ready());
+		while(input.ready()) {
+			files.add(input.readLine());
+		}
+		return files;
 	}
 	
 	public boolean isConnected() {

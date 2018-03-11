@@ -73,7 +73,10 @@ public class UserInterface extends JFrame implements ActionListener{
 				int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
 				if (result == JOptionPane.OK_OPTION) {
 				    boolean connected = client.connect(host.getText(),port.getText());
-					if(connected)consolePanel.updateConsole("Client connected succesfully!");
+					if(connected) {
+						consolePanel.updateConsole("Client connected succesfully!");
+						filePanel.enableActions();
+					}
 					else consolePanel.updateConsole("Connection failed, try again later");
 				} 
 			}
@@ -83,6 +86,7 @@ public class UserInterface extends JFrame implements ActionListener{
 				boolean connected = client.disconnect();
 				if(!connected)consolePanel.updateConsole("Client disconnected succesfully!");
 				else consolePanel.updateConsole("Something went wrong, disconnection was forced");
+				filePanel.disableActions();
 			}
 			else {
 				consolePanel.updateConsole("Client is already disconnected!");
@@ -92,7 +96,18 @@ public class UserInterface extends JFrame implements ActionListener{
 			
 		}
 		else if(command.equals(FilePanel.LIST_FILES)) {
-			
+			try {
+				consolePanel.updateConsole("TO SERVER: HELO");
+				String[] files = (String[]) client.getAvailableFiles().toArray();
+				for (String string : files) {
+					consolePanel.updateConsole("FILE: "+string);
+				}
+				filePanel.updateFiles(files);
+			}
+			catch(Exception ex) {
+				ex.printStackTrace();
+				consolePanel.updateConsole("IO Error, please try again later");
+			}
 		}
 	}
 	
