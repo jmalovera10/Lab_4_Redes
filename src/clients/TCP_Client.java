@@ -1,11 +1,17 @@
 package clients;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Observable;
 
+import UI.UserInterface;
 import protocol.Protocol;
 
 /**
@@ -13,20 +19,45 @@ import protocol.Protocol;
  * @author juanm
  *
  */
-public class TCP_Client {
+public class TCP_Client extends Observable{
 
+	/**
+	 * Client socket
+	 */
 	private Socket socket;
 
+	/**
+	 * Client input stream
+	 */
 	private BufferedReader input;
 
+	/**
+	 * Client output stream
+	 */
 	private PrintWriter output;
 
-	public TCP_Client() {
+	private boolean finishTransfer;
+
+	private boolean interrupt;
+
+	private String packageReceived;
+	
+	/**
+	 * Class constructor
+	 */
+	public TCP_Client(UserInterface ui) {
+		addObserver(ui);
 		this.socket = null;
 		this.input = null;
 		this.output = null;
 	}
 
+	/**
+	 * Method that connects the client with the server
+	 * @param host host name of server
+	 * @param port port of server
+	 * @return
+	 */
 	public boolean connect(String host, String port) {
 		try {
 			int portm = Integer.parseInt(port);
@@ -42,6 +73,10 @@ public class TCP_Client {
 		}
 	}
 
+	/**
+	 * Method that disconnects the socket
+	 * @return disconnection status
+	 */
 	public boolean disconnect() {
 		try {
 			socket.close();
@@ -57,6 +92,11 @@ public class TCP_Client {
 		}
 	}
 
+	/**
+	 * Method that gets available files from server
+	 * @return available files
+	 * @throws Exception
+	 */
 	public ArrayList<String> getAvailableFiles() throws Exception{
 		ArrayList<String> files = new ArrayList<String>();
 		output.println(Protocol.HELLO);
@@ -76,8 +116,63 @@ public class TCP_Client {
 		return files;
 	}
 
+	/**
+	 * Method that gets files from server
+	 * @param name filename
+	 * @throws Exception 
+	 */
+	public void getFile(String name) {
+		try {
+			output.println(Protocol.GET);
+			String msg = input.readLine();
+
+			if(msg.equals(Protocol.ACK)) {
+				System.out.println("Sending starts!");
+				output.println(name);
+				File file = new File("./sent-data/"+name);
+				if(!file.exists()) {
+					file.createNewFile();
+				}
+				BufferedOutputStream outFile = new BufferedOutputStream(new FileOutputStream(file));
+				BufferedInputStream inFile = new BufferedInputStream(socket.getInputStream());
+
+				byte[] buffer = new byte[4096];
+				int bytesRead;
+				finishTransfer = false;
+				while((bytesRead = inFile.read(buffer))!=-1) {
+					outFile.write(buffer, 0, bytesRead);
+					packageReceived = new String(buffer, 0, bytesRead);
+					setChanged();
+					notifyObservers(packageReceived);
+				}
+
+				finishTransfer = true;
+
+				outFile.flush();
+				outFile.close();
+				inFile.close();
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Method that returns the connection status
+	 * @return Connection status
+	 */
 	public boolean isConnected() {
 		return socket!=null && socket.isConnected();
+	}
+
+	public boolean finishTransfer() {
+		return finishTransfer;
+	}
+
+	public String getPackageReceived() {
+		return packageReceived;
 	}
 
 }

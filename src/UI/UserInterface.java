@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -13,7 +15,7 @@ import javax.swing.JTextField;
 
 import clients.TCP_Client;
 
-public class UserInterface extends JFrame implements ActionListener{
+public class UserInterface extends JFrame implements ActionListener, Observer{
 
 	/**
 	 * Default serial version
@@ -28,9 +30,12 @@ public class UserInterface extends JFrame implements ActionListener{
 	
 	private TCP_Client client;
 	
+	Object lock;
+	
 	public UserInterface() {
 		
-		client = new TCP_Client();
+		lock = new Object();
+		client = new TCP_Client(this);
 		
 		setLayout(new BorderLayout());
 		setTitle("TCP Client");
@@ -76,6 +81,7 @@ public class UserInterface extends JFrame implements ActionListener{
 					if(connected) {
 						consolePanel.updateConsole("Client connected succesfully!");
 						filePanel.enableActions();
+						filePanel.disableGet();
 					}
 					else consolePanel.updateConsole("Connection failed, try again later");
 				} 
@@ -94,6 +100,13 @@ public class UserInterface extends JFrame implements ActionListener{
 		}
 		else if(command.equals(FilePanel.GET_FILE)) {
 			
+			Thread t = new Thread() {
+				public void run() {
+					client.getFile(filePanel.getSelectedFile());
+				}
+			};
+			t.start();
+			
 		}
 		else if(command.equals(FilePanel.LIST_FILES)) {
 			try {
@@ -107,12 +120,19 @@ public class UserInterface extends JFrame implements ActionListener{
 				}
 				filePanel.updateFiles(results);
 				filePanel.disableList();
+				filePanel.enableGet();
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
 				consolePanel.updateConsole("IO Error, please try again later");
 			}
 		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		String pack = (String) arg;
+		consolePanel.updateConsole("PACKAGE: "+pack);
 	}
 	
 }

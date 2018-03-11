@@ -109,7 +109,7 @@ public class TCP_Worker extends Thread{
 						        output.println(byteArrayOutputStream.toByteArray());
 						        output.flush();
 						        System.out.println("Flushed: " + System.currentTimeMillis());
-								state="sending";
+								state="established";
 						}
 						else if(inMessage.equals("big.mp4")) {
 							//send big
@@ -123,7 +123,7 @@ public class TCP_Worker extends Thread{
 					        output.flush();
 					        System.out.println("Flushed: " + System.currentTimeMillis());
 							//send small
-							state="sending";
+							state="established";
 						}
 						else if(inMessage.equals(Protocol.BYE)) {
 							output.println(Protocol.BYE);
@@ -132,24 +132,12 @@ public class TCP_Worker extends Thread{
 							this.closeConnection();
 						}
 						break;
-					case "sending":
-						if(inMessage.equals(Protocol.BYE)) {
-							output.println(Protocol.BYE);
-							state="closed";
-							client.close();
-							this.closeConnection();
-						}
-						else if(inMessage.equals(Protocol.GET)) {
-							output.println(Protocol.ACK);
-							state="onDemand";
-						}
-						break;
 					}
 
 				}
 			}
 			catch(Exception e) {
-
+				e.printStackTrace();
 			}
 		}
 	}
