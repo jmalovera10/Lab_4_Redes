@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import clients.TCP_Client;
+import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 
 public class UserInterface extends JFrame implements ActionListener, Observer{
 
@@ -22,39 +23,39 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 	 * Default serial version
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private ActionPanel actPanel;
-	
+
 	private FilePanel filePanel;
-	
+
 	private ConsolePanel consolePanel;
-	
+
 	private TCP_Client client;
-	
+
 	Object lock;
-	
+
 	public UserInterface() {
-		
+
 		lock = new Object();
 		client = new TCP_Client(this);
-		
+
 		setLayout(new BorderLayout());
 		setTitle("TCP Client");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+
 		actPanel = new ActionPanel(this);
 		this.add(actPanel, BorderLayout.SOUTH);
-		
+
 		filePanel = new FilePanel(this);
 		this.add(filePanel, BorderLayout.EAST);
-		
+
 		consolePanel = new ConsolePanel();
 		this.add(consolePanel, BorderLayout.CENTER);
-		
+
 		setSize(new Dimension(500,500));
 		setLocationRelativeTo(null);
 	}
-	
+
 	public static void main(String[] args) {
 		UserInterface i = new UserInterface();
 		i.setVisible(true);
@@ -71,14 +72,14 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 				JTextField host = new JTextField();
 				JTextField port = new JTextField();
 				final JComponent[] inputs = new JComponent[] {
-				        new JLabel("Host"),
-				        host,
-				        new JLabel("Port"),
-				        port
+						new JLabel("Host"),
+						host,
+						new JLabel("Port"),
+						port
 				};
 				int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
 				if (result == JOptionPane.OK_OPTION) {
-				    boolean connected = client.connect(host.getText(),port.getText());
+					boolean connected = client.connect(host.getText(),port.getText());
 					if(connected) {
 						consolePanel.updateConsole("Client connected succesfully!");
 						filePanel.enableActions();
@@ -100,7 +101,7 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 			}
 		}
 		else if(command.equals(FilePanel.GET_FILE)) {
-			
+
 			Thread t = new Thread() {
 				public void run() {
 					filePanel.disableGet();
@@ -111,14 +112,19 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 						return;
 					}
 					if(client.getFile(file)) {
-						displayImage(file);
+						if(file.endsWith("PNG")||file.endsWith("png")) {
+							displayImage(file);
+						}else {
+							displayVideo(file);
+						}
+						
 					}
 					filePanel.enableGet();
 					filePanel.enableItems();
 				}
 			};
 			t.start();
-			
+
 		}
 		else if(command.equals(FilePanel.LIST_FILES)) {
 			try {
@@ -140,7 +146,24 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 			}
 		}
 	}
-	
+
+	public void displayVideo(String path) {
+		Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+
+		JFrame frame = new JFrame(path);
+
+		EmbeddedMediaPlayerComponent mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
+
+		frame.setContentPane(mediaPlayerComponent);
+
+		frame.setLocation(0, 0);
+		frame.setSize(screenSize.width, screenSize.height);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+
+		mediaPlayerComponent.getMediaPlayer().playMedia("./sent-data/"+path);//Movie name which want to play
+	}
+
 	public void displayImage(String path) {
 		ImageIcon image = new ImageIcon("./sent-data/"+path);
 		JLabel lbl = new JLabel();
@@ -153,5 +176,5 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 		String pack = (String) arg;
 		consolePanel.updateConsole("PACKAGE: "+pack);
 	}
-	
+
 }
