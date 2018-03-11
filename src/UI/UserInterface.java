@@ -53,10 +53,24 @@ public class UserInterface extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if(command.equals(ActionPanel.CONNECT)) {
-			
+			if(client.isConnected()) {
+				consolePanel.updateConsole("Client is already connected!");
+			}
+			else {
+				boolean connected = client.connect();
+				if(connected)consolePanel.updateConsole("Client connected succesfully!");
+				else consolePanel.updateConsole("Connection failed, try again later");
+			}
 		}
 		else if(command.equals(ActionPanel.DISCONNECT)) {
-			
+			if(client.isConnected()) {
+				boolean connected = client.disconnect();
+				if(!connected)consolePanel.updateConsole("Client disconnected succesfully!");
+				else consolePanel.updateConsole("Something went wrong, disconnection was forced");
+			}
+			else {
+				consolePanel.updateConsole("Client is already disconnected!");
+			}
 		}
 		else if(command.equals(FilePanel.GET_FILE)) {
 			

@@ -17,16 +17,26 @@ public class ConsolePanel extends JPanel{
 	
 	private JTextArea consoleText;
 	
+	private String msg;
+	
 	public ConsolePanel() {
 		this.setBorder(BorderFactory.createTitledBorder("Console"));
 		this.setLayout(new BorderLayout());
 		
-		consoleText = new JTextArea(">>");
+		msg = ">> ";
+		
+		consoleText = new JTextArea(msg);
+		consoleText.setEditable(false);
 		Font font = consoleText.getFont();
 		float size = font.getSize() + 3.0f;
 		consoleText.setFont( font.deriveFont(size) );
 		consoleText.setLineWrap(true);
 		JScrollPane scroll = new JScrollPane(consoleText);
 		this.add(scroll, BorderLayout.CENTER);
+	}
+	
+	public void updateConsole(String msg) {
+		this.msg += msg+"\n>> ";
+		consoleText.setText(this.msg);
 	}
 }
