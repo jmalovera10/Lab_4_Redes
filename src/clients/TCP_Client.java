@@ -24,9 +24,10 @@ public class TCP_Client {
 		this.output = null;
 	}
 	
-	public boolean connect() {
+	public boolean connect(String host, String port) {
 		try {
-			socket = new Socket("localhost", 8080);
+			int portm = Integer.parseInt(port);
+			socket = new Socket(host, portm);
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			output = new PrintWriter(socket.getOutputStream(),true);
 			return true;

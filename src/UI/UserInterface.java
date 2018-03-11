@@ -4,7 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import clients.TCP_Client;
 
@@ -57,9 +62,20 @@ public class UserInterface extends JFrame implements ActionListener{
 				consolePanel.updateConsole("Client is already connected!");
 			}
 			else {
-				boolean connected = client.connect();
-				if(connected)consolePanel.updateConsole("Client connected succesfully!");
-				else consolePanel.updateConsole("Connection failed, try again later");
+				JTextField host = new JTextField();
+				JTextField port = new JTextField();
+				final JComponent[] inputs = new JComponent[] {
+				        new JLabel("Host"),
+				        host,
+				        new JLabel("Port"),
+				        port
+				};
+				int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
+				if (result == JOptionPane.OK_OPTION) {
+				    boolean connected = client.connect(host.getText(),port.getText());
+					if(connected)consolePanel.updateConsole("Client connected succesfully!");
+					else consolePanel.updateConsole("Connection failed, try again later");
+				} 
 			}
 		}
 		else if(command.equals(ActionPanel.DISCONNECT)) {
