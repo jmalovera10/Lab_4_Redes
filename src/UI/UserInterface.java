@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import org.opencv.video.Video;
+
 import clients.TCP_Client;
 
 public class UserInterface extends JFrame implements ActionListener, Observer{
@@ -51,7 +53,8 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 		consolePanel = new ConsolePanel();
 		this.add(consolePanel, BorderLayout.CENTER);
 
-		setSize(new Dimension(500,500));
+		setSize(new Dimension(800,500));
+		setResizable(false);
 		setLocationRelativeTo(null);
 	}
 
@@ -147,7 +150,13 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 	}
 
 	public void displayVideo(String path) {
-		
+		VideoPlayer vp = new VideoPlayer();
+		vp.initGUI();
+		try {
+			vp.runMainLoop("medium.mp4");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void displayImage(String path) {

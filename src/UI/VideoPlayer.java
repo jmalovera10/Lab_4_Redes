@@ -21,7 +21,7 @@ public class VideoPlayer {
 	private JFrame frame;
 	private JLabel imageLabel;
 	
-	private void initGUI() {
+	public void initGUI() {
 		frame = new JFrame("Video Playback Example");  
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 		frame.setSize(400,400);  
@@ -30,10 +30,11 @@ public class VideoPlayer {
 		frame.setVisible(true);       
 	}
 
-	private void runMainLoop(String file) throws InterruptedException {
+	public void runMainLoop(String file) throws InterruptedException {
 		Mat webcamMatImage = new Mat();  
 		Image tempImage;  
-		VideoCapture capture = new VideoCapture("./sent-data/"+file);
+		VideoCapture capture = new VideoCapture();
+		capture.open("./sent-data/"+file);
 		if( capture.isOpened()){  
 			while (true){  
 				capture.read(webcamMatImage);  
