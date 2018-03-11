@@ -45,8 +45,8 @@ public class UserInterface extends JFrame implements ActionListener{
 		consolePanel = new ConsolePanel();
 		this.add(consolePanel, BorderLayout.CENTER);
 		
-		setLocationRelativeTo(null);
 		pack();
+		setLocationRelativeTo(null);
 	}
 	
 	public static void main(String[] args) {
@@ -83,8 +83,8 @@ public class UserInterface extends JFrame implements ActionListener{
 		}
 		else if(command.equals(ActionPanel.DISCONNECT)) {
 			if(client.isConnected()) {
-				boolean connected = client.disconnect();
-				if(!connected)consolePanel.updateConsole("Client disconnected succesfully!");
+				boolean disconnected = client.disconnect();
+				if(disconnected)consolePanel.updateConsole("Client disconnected succesfully!");
 				else consolePanel.updateConsole("Something went wrong, disconnection was forced");
 				filePanel.disableActions();
 			}
@@ -98,11 +98,15 @@ public class UserInterface extends JFrame implements ActionListener{
 		else if(command.equals(FilePanel.LIST_FILES)) {
 			try {
 				consolePanel.updateConsole("TO SERVER: HELO");
-				String[] files = (String[]) client.getAvailableFiles().toArray();
-				for (String string : files) {
-					consolePanel.updateConsole("FILE: "+string);
+				Object[] files = client.getAvailableFiles().toArray();
+				String[] results = new String[files.length];
+				for(int i=0; i<files.length; i++) {
+					String val = (String)files[i];
+					consolePanel.updateConsole("FILE: "+val);
+					results[i] = val;
 				}
-				filePanel.updateFiles(files);
+				filePanel.updateFiles(results);
+				filePanel.disableList();
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();

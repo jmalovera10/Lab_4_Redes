@@ -40,6 +40,8 @@ public class TCP_Server {
 		while(true) {
 			try {
 				Socket client = server.accept();
+				client.setKeepAlive(true);
+				System.out.println("Connection accepted!");
 				TCP_Worker worker=null;
 				for(int i = 0; i < workers.length; i++) {
 					if (!workers[i].isActive()) {

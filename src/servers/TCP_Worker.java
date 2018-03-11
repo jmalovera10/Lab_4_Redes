@@ -57,27 +57,27 @@ public class TCP_Worker extends Thread{
 	}
 	public void run() {
 		state="begining";
-		while(!client.isClosed()) {
+		while(client.isConnected()) {
 			try {
 				if(input.ready()) {
 					inMessage = input.readLine();
 					switch (state) {
 					case "begining":
-						if(inMessage==Protocol.HELLO) {
+						if(inMessage.equals(Protocol.HELLO)) {
 							output.println(Protocol.HELLO);
-							output.println(Protocol.DIR);
-							output.print("small.PNG");
-							output.print("medium.mp4");
-							output.print("big.mp4");
+							output.println(Protocol.DIR+Protocol.SEP+"3");
+							output.println("small.PNG");
+							output.println("medium.mp4");
+							output.println("big.mp4");
 							state="established";
 						}
 						break;
 					case "established":
-						if(inMessage==Protocol.GET) {
+						if(inMessage.equals(Protocol.GET)) {
 							output.println(Protocol.ACK);
 							state="onDemand";
 						}
-						else if(inMessage==Protocol.BYE) {
+						else if(inMessage.equals(Protocol.BYE)) {
 							output.println(Protocol.BYE);
 							state="closed";
 							client.close();
@@ -85,7 +85,7 @@ public class TCP_Worker extends Thread{
 						}
 						break;
 					case "onDemand":
-						if(inMessage=="small.PNG") {
+						if(inMessage.equals("small.PNG")) {
 					        BufferedImage image = ImageIO.read(new File("/data/small.PNG"));
 					        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 					        ImageIO.write(image, "jpg", byteArrayOutputStream);
@@ -98,7 +98,7 @@ public class TCP_Worker extends Thread{
 							//send small
 							state="sending";
 						}
-						else if(inMessage=="medium.mp4") {
+						else if(inMessage.equals("medium.mp4")) {
 							//send m
 							  BufferedImage image = ImageIO.read(new File("/data/medium.mp4"));
 						        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -111,7 +111,7 @@ public class TCP_Worker extends Thread{
 						        System.out.println("Flushed: " + System.currentTimeMillis());
 								state="sending";
 						}
-						else if(inMessage=="big.mp4") {
+						else if(inMessage.equals("big.mp4")) {
 							//send big
 							BufferedImage image = ImageIO.read(new File("/data/big.mp4"));
 					        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -125,7 +125,7 @@ public class TCP_Worker extends Thread{
 							//send small
 							state="sending";
 						}
-						else if(inMessage==Protocol.BYE) {
+						else if(inMessage.equals(Protocol.BYE)) {
 							output.println(Protocol.BYE);
 							state="closed";
 							client.close();
@@ -133,13 +133,13 @@ public class TCP_Worker extends Thread{
 						}
 						break;
 					case "sending":
-						if(inMessage==Protocol.BYE) {
+						if(inMessage.equals(Protocol.BYE)) {
 							output.println(Protocol.BYE);
 							state="closed";
 							client.close();
 							this.closeConnection();
 						}
-						else if(inMessage==Protocol.GET) {
+						else if(inMessage.equals(Protocol.GET)) {
 							output.println(Protocol.ACK);
 							state="onDemand";
 						}
