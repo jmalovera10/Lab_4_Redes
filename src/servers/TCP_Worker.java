@@ -92,8 +92,8 @@ public class TCP_Worker extends Thread{
 							File file = new File("./data/small.PNG");
 							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
 							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
-
-							byte[] buffer = new byte[102400];
+							//Initial 10240
+							byte[] buffer = new byte[51200];
 							int bytesRead;
 							while((bytesRead = reader.read(buffer))!=-1) {
 								out.write(buffer, 0, bytesRead);
@@ -119,8 +119,8 @@ public class TCP_Worker extends Thread{
 							File file = new File("./data/medium.mp4");
 							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
 							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
-
-							byte[] buffer = new byte[10240];
+							//Initial 10240
+							byte[] buffer = new byte[51200];
 							int bytesRead;
 							while((bytesRead = reader.read(buffer))!=-1) {
 								out.write(buffer, 0, bytesRead);
@@ -145,8 +145,8 @@ public class TCP_Worker extends Thread{
 							File file = new File("./data/big.mp4");
 							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
 							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
-
-							byte[] buffer = new byte[10240];
+							//Initial 10240
+							byte[] buffer = new byte[51200];
 							int bytesRead;
 							while((bytesRead = reader.read(buffer))!=-1) {
 								out.write(buffer, 0, bytesRead);
