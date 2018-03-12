@@ -14,8 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import org.opencv.video.Video;
-
 import clients.TCP_Client;
 
 public class UserInterface extends JFrame implements ActionListener, Observer{
@@ -116,10 +114,7 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 					if(client.getFile(file)) {
 						if(file.endsWith("PNG")||file.endsWith("png")) {
 							displayImage(file);
-						}else {
-							displayVideo(file);
 						}
-						
 					}
 					filePanel.enableGet();
 					filePanel.enableItems();
@@ -146,16 +141,6 @@ public class UserInterface extends JFrame implements ActionListener, Observer{
 				ex.printStackTrace();
 				consolePanel.updateConsole("IO Error, please try again later");
 			}
-		}
-	}
-
-	public void displayVideo(String path) {
-		VideoPlayer vp = new VideoPlayer();
-		vp.initGUI();
-		try {
-			vp.runMainLoop("medium.mp4");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 

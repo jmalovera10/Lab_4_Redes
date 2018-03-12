@@ -137,7 +137,7 @@ public class TCP_Client extends Observable{
 				BufferedOutputStream outFile = new BufferedOutputStream(new FileOutputStream(file));
 				BufferedInputStream inFile = new BufferedInputStream(socket.getInputStream());
 
-				byte[] buffer = new byte[4096];
+				byte[] buffer = new byte[102400];
 				int bytesRead;
 				finishTransfer = false;
 				while((bytesRead = inFile.read(buffer))!=-1) {

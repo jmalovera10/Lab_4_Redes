@@ -93,7 +93,7 @@ public class TCP_Worker extends Thread{
 							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
 							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
 
-							byte[] buffer = new byte[4096];
+							byte[] buffer = new byte[102400];
 							int bytesRead;
 							while((bytesRead = reader.read(buffer))!=-1) {
 								out.write(buffer, 0, bytesRead);
@@ -120,7 +120,7 @@ public class TCP_Worker extends Thread{
 							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
 							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
 
-							byte[] buffer = new byte[4096];
+							byte[] buffer = new byte[10240];
 							int bytesRead;
 							while((bytesRead = reader.read(buffer))!=-1) {
 								out.write(buffer, 0, bytesRead);
@@ -146,7 +146,7 @@ public class TCP_Worker extends Thread{
 							BufferedOutputStream out = new BufferedOutputStream(client.getOutputStream());
 							BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file));
 
-							byte[] buffer = new byte[4096];
+							byte[] buffer = new byte[10240];
 							int bytesRead;
 							while((bytesRead = reader.read(buffer))!=-1) {
 								out.write(buffer, 0, bytesRead);
